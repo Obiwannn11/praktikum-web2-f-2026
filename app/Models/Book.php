@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Category;
 
 class Book extends Model
 {
@@ -14,11 +13,20 @@ class Book extends Model
         'release_date',
     ];
 
-    public function category(){
+    // Cast: ubah otomatis kolom release_date menjadi objek tanggal (Carbon)
+    protected $casts = [
+        'release_date' => 'date',
+    ];
+
+    // Relasi: satu buku dimiliki oleh satu kategori (belongsTo)
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-      public function borrow(){
+    // Relasi: satu buku bisa dipinjam berkali-kali (hasMany)
+    public function borrow()
+    {
         return $this->hasMany(Borrow::class);
     }
 }
