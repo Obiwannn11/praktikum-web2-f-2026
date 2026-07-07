@@ -1,5 +1,6 @@
- <?php
+<?php
 
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -13,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Daftarkan alias 'role' agar bisa dipakai di route: middleware('role:admin')
+        $middleware->alias([
+            'role' => RoleMiddleware::class,
+        ]);
+
         // API tidak punya halaman login web. Matikan redirect ke route('login')
         // agar user yang belum login menerima 401 JSON, bukan error redirect.
         $middleware->redirectGuestsTo(fn () => null);
